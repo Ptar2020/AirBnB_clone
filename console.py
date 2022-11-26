@@ -3,6 +3,13 @@ import cmd
 import time
 import sys
 from models.base_model import BaseModel
+from models.city import City
+from models.user import User
+from models.review import Review
+from models.state import State
+from models.place import Place
+from models.amenity import Amenity
+import models
 """The console class"""
 
 
@@ -11,9 +18,9 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
     classes = {'BaseModel': BaseModel,
-               #    'Amenity': Amenity,
-               #    'State': State, 'Place': Place, 'Review': Review,
-               #    'User': User, 'City': City
+               'Amenity': Amenity,
+               'State': State, 'Place': Place, 'Review': Review,
+               'User': User, 'City': City
                }
 
     def do_help(self, line):
@@ -28,12 +35,28 @@ class HBNBCommand(cmd.Cmd):
             if line in self.classes:
                 get_class = getattr(sys.modules[__name__], line)
                 print(get_class().id)
+                models.data.save()
             else:
                 print("**class doesn't exist**")
         return
 
     def do_show(self, line):
-        pass
+        """ Method to print instance """
+        if len(line) == 0:
+            print('** class name missing **')
+            return
+        elif line.split()[0] not in self.classes:
+            print("** class doesn't exist **")
+            return
+        elif len(line.split()) > 1:
+            key = line.split()[0] + '.' + line.split()[1]
+            if key in models.data.all():
+                i = models.data.all()
+                print(i[key])
+            else:
+                print('** no instance found **')
+        else:
+            print('** instance id missing **')
 
     def do_update(self, line):
         pass
