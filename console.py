@@ -35,7 +35,7 @@ class HBNBCommand(cmd.Cmd):
             if line in self.classes:
                 get_class = getattr(sys.modules[__name__], line)
                 print(get_class().id)
-                models.data.save()
+                models.storage.save()
             else:
                 print("**class doesn't exist**")
         return
@@ -50,8 +50,8 @@ class HBNBCommand(cmd.Cmd):
             return
         elif len(line.split()) > 1:
             key = line.split()[0] + '.' + line.split()[1]
-            if key in models.data.all():
-                i = models.data.all()
+            if key in models.storage.all():
+                i = models.storage.all()
                 print(i[key])
             else:
                 print('** no instance found **')
@@ -61,11 +61,11 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, line):
         """ Method to print all instances """
         if len(line) == 0:
-            print([str(a) for a in models.data.all().values()])
+            print([str(a) for a in models.storage.all().values()])
         elif line not in self.classes:
             print("** class doesn't exist **")
         else:
-            print([str(a) for b, a in models.data.all().items() if line in b])
+            print([str(a) for b, a in models.storage.all().items() if line in b])
 
     def do_update(self, line):
         """ Method to update the JSON file"""
@@ -81,13 +81,13 @@ class HBNBCommand(cmd.Cmd):
             return
         else:
             key = line[0] + '.' + line[1]
-            if key in models.data.all():
+            if key in models.storage.all():
                 if len(line) > 2:
                     if len(line) == 3:
                         print('** value missing **')
                     else:
-                        setattr(models.data.all()[key], line[2], line[3][1:-1])
-                        models.data.all()[key].save()
+                        setattr(models.storage.all()[key], line[2], line[3][1:-1])
+                        models.storage.all()[key].save()
                 else:
                     print('** attribute name missing **')
             else:
@@ -126,9 +126,9 @@ class HBNBCommand(cmd.Cmd):
             return
         if len(arg_list) > 1:
             key = arg_list[0] + '.' + arg_list[1]
-            if key in models.data.all():
-                models.data.all().pop(key)
-                models.data.save()
+            if key in models.storage.all():
+                models.storage.all().pop(key)
+                models.storage.save()
             else:
                 print('** no instance found **')
                 return
@@ -136,7 +136,7 @@ class HBNBCommand(cmd.Cmd):
     def do_count(self, line):
         """  retrieves the number of instances of a class """
         class_token = line.split()
-        data = models.data.all()
+        data = models.storage.all()
         instances = 0
         if class_token[0] not in self.classes:
             print("** class doesn't exist **")
