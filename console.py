@@ -93,6 +93,23 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print('** no instance found **')
 
+    def precmd(self, line):
+        """ This is executed just before the typed command is interpreted """
+        args = line.split('.', 1)
+        if len(args) == 2:
+            _class = args[0]
+            args = args[1].split('(', 1)
+            command = args[0]
+            if len(args) == 2:
+                args = args[1].split(')', 1)
+                if len(args) == 2:
+                    _id = args[0]
+                    other_arguments = args[1]
+            line = command + " " + _class + " " + _id + " " + other_arguments
+            return line
+        else:
+            return line
+
     def do_destroy(self, line):
         """ Method to delete instance with class and id """
         if len(line) == 0:
