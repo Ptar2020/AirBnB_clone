@@ -25,7 +25,10 @@ class HBNBCommand(cmd.Cmd):
 
     def do_help(self, line):
         """Get help on using the console"""
-        text = '''Documented commands (type help < topic > ): \n ========================================\nEOF help  quit\n'''
+        text = '''Documented commands\
+            (type help < topic > ):\
+                \n ========================================\
+                    \nEOF help  quit\n'''
         print(text, line)
 
     def do_create(self, line):
@@ -65,7 +68,8 @@ class HBNBCommand(cmd.Cmd):
         elif line not in self.classes:
             print("** class doesn't exist **")
         else:
-            print([str(a) for b, a in models.storage.all().items() if line in b])
+            print([str(a) for b, a in models.storage.all()
+                   .items() if line in b])
 
     def do_update(self, line):
         """ Method to update the JSON file"""
@@ -86,7 +90,8 @@ class HBNBCommand(cmd.Cmd):
                     if len(line) == 3:
                         print('** value missing **')
                     else:
-                        setattr(models.storage.all()[key], line[2], line[3][1:-1])
+                        setattr(models.storage.all()[key],
+                                line[2], line[3][1:-1])
                         models.storage.all()[key].save()
                 else:
                     print('** attribute name missing **')
